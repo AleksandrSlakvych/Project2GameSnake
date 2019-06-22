@@ -1,21 +1,22 @@
+﻿using NConsoleGraphics;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Project2GameSnake
-{
-    class Program
-    {
-        static void Main(string[] args)
-        {
-            // The code provided will print ‘Hello World’ to the console.
-            // Press Ctrl+F5 (or go to Debug > Start Without Debugging) to run your app.
-            Console.WriteLine("Hello World!");
-            Console.ReadKey();
+namespace OOPGame {
 
-            // Go to http://aka.ms/dotnet-get-started-console to continue learning how to build a console app! 
-        }
+  public class Program {
+
+    static void Main(string[] args) {
+
+      Console.WindowWidth = 70;
+      Console.WindowHeight = 50;
+      Console.SetBufferSize(Console.WindowWidth, Console.WindowHeight);
+      Console.BackgroundColor = ConsoleColor.White;
+      Console.CursorVisible = false;
+      Console.Clear();
+      ConsoleGraphics graphics = new ConsoleGraphics();
+      GameEngine engine = new GameEngine(graphics);
+
+      engine.Start();
     }
+  }
 }

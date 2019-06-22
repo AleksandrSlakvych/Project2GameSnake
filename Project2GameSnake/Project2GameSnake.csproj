@@ -32,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ConsoleGraphics.cs">
+      <HintPath>..\..\..\..\Downloads\ClassWork 01.06.19-20190601T193204Z-001\ClassWork 01.06.19\List2-20190525T071035Z-001\List2\List2\ConsoleGraphics.cs.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -42,8 +45,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Button.cs" />
+    <Compile Include="GameEngine.cs" />
+    <Compile Include="GameSettings.cs" />
+    <Compile Include="IGameObject.cs" />
+    <Compile Include="Part.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SnakeF.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
