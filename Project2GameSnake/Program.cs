@@ -7,7 +7,7 @@ namespace OOPGame {
 
     static void Main(string[] args) {
 
-      Console.WindowWidth = 70;
+      Console.WindowWidth = 80;
       Console.WindowHeight = 50;
       Console.SetBufferSize(Console.WindowWidth, Console.WindowHeight);
       Console.BackgroundColor = ConsoleColor.White;

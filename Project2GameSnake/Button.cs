@@ -12,8 +12,6 @@ namespace OOPGame
         private int x, y, width, height;
         private string text;
 
-        public Button() { }
-
         public Button(int x, int y, int w, int h, string txt)
         {
             this.x = x;

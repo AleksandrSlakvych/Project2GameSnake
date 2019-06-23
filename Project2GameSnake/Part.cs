@@ -7,7 +7,7 @@ using NConsoleGraphics;
 
 namespace OOPGame
 {
-    class Part: IGameObject
+    class Part : IGameObject
     {
         public int Width { get; set; }
         public int Height { get; set; }
@@ -19,13 +19,13 @@ namespace OOPGame
 
         public Part(int x, int y, uint colour) // Size of the part of the snake
         {
-            this.X = x;
-            this.Y = y;
+            X = x;
+            Y = y;
             Width = 16;
             Height = 16;
             SpeedX = 0;
             SpeedY = 0;
-            this.Colour = colour;
+            Colour = colour;
         }
 
         public Part() // Size of the square to pick
@@ -41,7 +41,7 @@ namespace OOPGame
 
         public void Render(ConsoleGraphics graphics)
         {
-            graphics.FillRectangle(Colour, X*Width, Y*Height, Width, Height);
+            graphics.FillRectangle(Colour, X * Width, Y * Height, Width, Height);
         }
 
         public void Update(GameEngine engine)

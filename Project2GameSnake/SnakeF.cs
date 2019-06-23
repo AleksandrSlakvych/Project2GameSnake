@@ -8,44 +8,45 @@ using NConsoleGraphics;
 
 namespace OOPGame
 {
+    public enum Direction { Up, Down, Left, Right };
+
     class SnakeF : IGameObject
     {
         private int fieldWidth, fieldHeight;
-
         private List<Part> snake;
-
         private Part head;
-
         private Part food;
-
         private Button buttonRestart, buttonHighScore;
-
         private string message;
-
         private Random random = new Random();
+        private GameEngine engine;
 
-        GameEngine engine;
+        private Direction Direction { get; set; }
+        public bool GameOver { get; set; }
+        private bool GameInfo { get; set; }
+        private int Score { get; set; }
+        private int Points { get; set; }
 
         public SnakeF(ConsoleGraphics graphics, GameEngine engine)
         {
             this.engine = engine;
-            new GameSettings();
             snake = new List<Part>();
             head = new Part(20, 20, 0xFFFF0000);
             snake.Add(head);
-
             fieldHeight = graphics.ClientHeight;
             fieldWidth = graphics.ClientWidth;
-
+            Direction = Direction.Down;
+            GameOver = false;
+            GameInfo = false;
+            Score = 0;
+            Points = 100;
             food = new Part();
             food.X = random.Next(0, fieldWidth / food.Width);
             food.Colour = 0xFFFFFF00;
             food.Y = random.Next(0, fieldHeight / food.Height);
             food.Render(graphics);
-
-            buttonRestart = new Button();
-            buttonHighScore = new Button();
-
+            buttonRestart = new Button(10, 10, 200, 50, "NEW GAME");
+            buttonHighScore = new Button(10, 120, 200, 50, "BEST SCORE");
             engine.ClearScreen();
             engine.AddObject(head);
             engine.AddObject(food);
@@ -53,20 +54,20 @@ namespace OOPGame
 
         public void Render(ConsoleGraphics graphics)
         {
-            if (GameSettings.GameOver != true)
+            if (!GameOver)
             {
                 for (int i = 0; i < snake.Count; i++)
                 {
                     graphics.FillRectangle(snake[i].Colour, snake[i].X * snake[i].Width, snake[i].Y * head.Height, head.Width, head.Height);
                 }
             }
-            else if (GameSettings.GameInfo)
+            else if (GameInfo)
             {
                 ResumeGame(graphics);
             }
             else
             {
-                message = "GAME OVER. Your Result: " + GameSettings.Score.ToString() + " points";
+                message = "GAME OVER. Your Result: " + Score.ToString() + " points";
                 ResumeGame(graphics);
             }
         }
@@ -76,22 +77,22 @@ namespace OOPGame
             buttonHighScore.Update(engine);
             buttonRestart.Update(engine);
 
-            if (!GameSettings.GameOver)
+            if (!GameOver)
             {
-                if (Input.IsKeyDown(Keys.RIGHT) && GameSettings.Direction != Direction.Left)
-                    GameSettings.Direction = Direction.Right;
-                else if (Input.IsKeyDown(Keys.LEFT) && GameSettings.Direction != Direction.Right)
-                    GameSettings.Direction = Direction.Left;
-                else if (Input.IsKeyDown(Keys.UP) && GameSettings.Direction != Direction.Down)
-                    GameSettings.Direction = Direction.Up;
-                else if (Input.IsKeyDown(Keys.DOWN) && GameSettings.Direction != Direction.Up)
-                    GameSettings.Direction = Direction.Down;
+                if (Input.IsKeyDown(Keys.RIGHT) && Direction != Direction.Left)
+                    Direction = Direction.Right;
+                else if (Input.IsKeyDown(Keys.LEFT) && Direction != Direction.Right)
+                    Direction = Direction.Left;
+                else if (Input.IsKeyDown(Keys.UP) && Direction != Direction.Down)
+                    Direction = Direction.Up;
+                else if (Input.IsKeyDown(Keys.DOWN) && Direction != Direction.Up)
+                    Direction = Direction.Down;
 
                 MovePlayer(engine);
             }
         }
 
-        private void CreateEat(GameEngine engine)
+        private void CreateFood(GameEngine engine)
         {
             bool needNewFood = true;
 
@@ -111,7 +112,7 @@ namespace OOPGame
 
         private void Die(GameEngine engine)
         {
-            GameSettings.GameOver = true;
+            GameOver = true;
         }
 
         private void Eat(GameEngine engine)
@@ -119,11 +120,9 @@ namespace OOPGame
             food.Colour = 0xFF00FF00;
             food.X = snake[snake.Count - 1].X;
             food.Y = snake[snake.Count - 1].Y;
-
             snake.Add(food);
-            CreateEat(engine);
-
-            GameSettings.Score += GameSettings.Points;
+            CreateFood(engine);
+            Score += Points;
         }
 
         private void MovePlayer(GameEngine engine)
@@ -132,7 +131,7 @@ namespace OOPGame
             {
                 if (i == 0)
                 {
-                    switch (GameSettings.Direction)
+                    switch (Direction)
                     {
                         case Direction.Right:
                             snake[i].SpeedX = 1;
@@ -188,13 +187,11 @@ namespace OOPGame
         private void ResumeGame(ConsoleGraphics graphics)
         {
             graphics.DrawString(message, "Arial", 0xFFFF0000, 100, 300);
-            this.buttonRestart = new Button(10, 10, 200, 50, "NEW GAME");
-            this.buttonHighScore = new Button(10, 120, 200, 50, "BEST SCORE");
             buttonRestart.Render(graphics);
             buttonHighScore.Render(graphics);
             buttonRestart.MouseLeftDown += MouseRestart;
             buttonHighScore.MouseLeftDown += HighScore;
-            UpdatePoints(GameSettings.Score);
+            UpdatePoints(Score);
         }
 
         private void HighScore(object sender, EventArgs e)
@@ -202,14 +199,14 @@ namespace OOPGame
             string path = "Points.txt";
             string score = File.ReadAllText(path);
             message = "BEST RESULT : " + score;
-            GameSettings.GameOver = true;
-            GameSettings.GameInfo = true;
+            GameOver = true;
+            GameInfo = true;
         }
 
         private void MouseRestart(object obj, EventArgs e)
         {
             engine.Restart();
-            GameSettings.GameInfo = false;
+            GameInfo = false;
         }
 
         private void UpdatePoints(int points)

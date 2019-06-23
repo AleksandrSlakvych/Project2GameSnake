@@ -47,7 +47,6 @@
   <ItemGroup>
     <Compile Include="Button.cs" />
     <Compile Include="GameEngine.cs" />
-    <Compile Include="GameSettings.cs" />
     <Compile Include="IGameObject.cs" />
     <Compile Include="Part.cs" />
     <Compile Include="Program.cs" />

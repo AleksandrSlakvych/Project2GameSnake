@@ -9,15 +9,15 @@ namespace OOPGame
     {
 
         private ConsoleGraphics graphics;
-        public List<IGameObject> objects = new List<IGameObject>();
+        private List<IGameObject> objects = new List<IGameObject>();
         private List<IGameObject> tempObjects = new List<IGameObject>();
-        private SnakeF SnakeF;
+        private SnakeF snakeF;
 
         public GameEngine(ConsoleGraphics graphics)
         {
             this.graphics = graphics;
-            SnakeF = new SnakeF(graphics, this);
-            AddObject(SnakeF);
+            snakeF = new SnakeF(graphics, this);
+            AddObject(snakeF);
         }
 
         public void ClearScreen()
@@ -30,8 +30,8 @@ namespace OOPGame
         {
             ClearScreen();
             tempObjects = new List<IGameObject>();
-            SnakeF = new SnakeF(graphics, this);
-            AddObject(SnakeF);
+            snakeF = new SnakeF(graphics, this);
+            AddObject(snakeF);
             Start();
         }
 
@@ -44,7 +44,7 @@ namespace OOPGame
         {
             while (true)
             {
-                if(GameSettings.GameOver)
+                if(snakeF.GameOver)
                 {
                     objects.RemoveAll(o => o is Part);
                     graphics.FillRectangle(0xFFFFFFFF, 0, 0, graphics.ClientWidth, graphics.ClientHeight);
